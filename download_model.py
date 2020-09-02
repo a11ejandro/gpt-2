@@ -16,7 +16,7 @@ subdir = subdir.replace('\\','/') # needed for Windows
 
 for filename in ['checkpoint','hparams.json','model-282000.data-00000-of-00001', 'model-282000.index', 'model-282000.meta', 'sp.model', 'sp.vocab']:
 
-    r = requests.get("http://wald.beirel.ru:44444/models/" + subdir + "/" + filename, stream=True)
+    r = requests.get("http://wald.beirel.ru:44444/" + subdir + "/" + filename, stream=True)
 
     with open(os.path.join(subdir, filename), 'wb') as f:
         file_size = int(r.headers["content-length"])
