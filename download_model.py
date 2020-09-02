@@ -14,7 +14,7 @@ if not os.path.exists(subdir):
     os.makedirs(subdir)
 subdir = subdir.replace('\\','/') # needed for Windows
 
-for filename in ['checkpoint','encoder.json','hparams.json','model.ckpt.data-00000-of-00001', 'model.ckpt.index', 'model.ckpt.meta', 'vocab.bpe']:
+for filename in ['checkpoint','hparams.json','model-282000.data-00000-of-00001', 'model-282000.index', 'model-282000.meta', 'sp.model', 'sp.vocab']:
 
     r = requests.get("http://wald.beirel.ru:44444/models/" + subdir + "/" + filename, stream=True)
 
