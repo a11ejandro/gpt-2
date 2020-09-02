@@ -1,11 +1,12 @@
 import glob
 import numpy as np
 import os
+import random
 import tensorflow as tf
 import tqdm
 
 
-def load_dataset(enc, path, combine, encoding=None):
+def load_dataset(enc, path, combine):
     paths = []
     if os.path.isfile(path):
         # Simple file
@@ -27,16 +28,20 @@ def load_dataset(enc, path, combine, encoding=None):
             with np.load(path) as npz:
                 for item in npz.files:
                     token_chunks.append(npz[item])
+        elif path.endswith('.ids'):
+            with open(path, 'r') as ids:
+                tokens = np.stack(list(map(int, filter(None, ids.read().replace('\n', ' ').split(' ')))))
+                token_chunks.append(tokens)
         else:
             # Plain text
-            with open(path, 'r', encoding=encoding) as fp:
+            with open(path, 'r') as fp:
                 raw_text += fp.read()
             if len(raw_text) >= combine:
                 tokens = np.stack(enc.encode(raw_text))
                 token_chunks.append(tokens)
                 raw_text = ''
             else:
-                raw_text += '<|endoftext|>'
+                raw_text += '<|n|>'
     if raw_text:
         tokens = np.stack(enc.encode(raw_text))
         token_chunks.append(tokens)
@@ -61,13 +66,12 @@ class Sampler(object):
     'Fairly' means that the distribution is the same as sampling from one concatenated chunk,
     but without crossing chunk boundaries."""
 
-    def __init__(self, chunks, seed=None):
+    def __init__(self, chunks):
         self.chunks = chunks
         self.total_size = sum(chunk.shape[0] for chunk in chunks)
         self.boundaries = [0]
         for i in range(len(chunks)):
             self.boundaries.append(self.boundaries[-1] + chunks[i].shape[0])
-        self.rs = np.random.RandomState(seed=seed)
 
     def sample(self, length):
         assert length < self.total_size // len(
@@ -75,7 +79,7 @@ class Sampler(object):
         ), "Dataset files are too small to sample {} tokens at a time".format(
             length)
         while True:
-            index = self.rs.randint(0, self.total_size - length - 1)
+            index = random.randint(0, self.total_size - length - 1)
             i = binary_search(lambda j: self.boundaries[j] > index, 0,
                               len(self.boundaries) - 1) - 1
             if self.boundaries[i + 1] > index + length:

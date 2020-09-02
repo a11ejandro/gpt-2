@@ -6,17 +6,17 @@ import os
 import numpy as np
 import tensorflow as tf
 
-import model, sample, encoder
+import model, sample, encoder_sp as encoder
 
 def interact_model(
-    model_name='117M',
+    model_name='1250M',
     seed=None,
     nsamples=1,
     batch_size=1,
     length=None,
-    temperature=1,
-    top_k=0,
-    top_p=0.0
+    temperature=0.8,
+    top_k=40,
+    run_name='run1',
 ):
     """
     Interactively run the model
@@ -35,8 +35,6 @@ def interact_model(
      considered for each step (token), resulting in deterministic completions,
      while 40 means 40 words are considered at each step. 0 (default) is a
      special setting meaning no restrictions. 40 generally is a good value.
-    :top_p=0.0 : Float value controlling diversity. Implements nucleus sampling,
-     overriding top_k if set to a value > 0. A good setting is 0.9.
     """
     if batch_size is None:
         batch_size = 1
@@ -60,10 +58,11 @@ def interact_model(
             hparams=hparams, length=length,
             context=context,
             batch_size=batch_size,
-            temperature=temperature, top_k=top_k, top_p=top_p
+            temperature=temperature, top_k=top_k
         )
 
         saver = tf.train.Saver()
+        #ckpt = tf.train.latest_checkpoint(os.path.join('models', model_name, 'checkpoint/%s' % run_name))
         ckpt = tf.train.latest_checkpoint(os.path.join('models', model_name))
         saver.restore(sess, ckpt)
 
@@ -87,3 +86,4 @@ def interact_model(
 
 if __name__ == '__main__':
     fire.Fire(interact_model)
+
