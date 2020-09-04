@@ -6,10 +6,10 @@ import os
 import numpy as np
 import tensorflow as tf
 
-import model, sample, encoder
+import model, sample, encoder_sp as encoder
 
 def sample_model(
-    model_name='117M',
+    model_name='1250M',
     seed=None,
     nsamples=0,
     batch_size=1,
