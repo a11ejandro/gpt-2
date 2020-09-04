@@ -13,7 +13,7 @@ def interact_model(
     seed=None,
     nsamples=1,
     batch_size=1,
-    length=None,
+    length=25,
     temperature=0.8,
     top_k=40,
     run_name='run1',
