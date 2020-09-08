@@ -13,7 +13,7 @@ def interact_model(
     seed=None,
     nsamples=1,
     batch_size=1,
-    length=25,
+    length=5,
     temperature=0.8,
     top_k=40,
     run_name='run1',
@@ -42,6 +42,7 @@ def interact_model(
 
     enc = encoder.get_encoder(model_name)
     hparams = model.default_hparams()
+    
     with open(os.path.join('models', model_name, 'hparams.json')) as f:
         hparams.override_from_dict(json.load(f))
 
@@ -66,12 +67,24 @@ def interact_model(
         ckpt = tf.train.latest_checkpoint(os.path.join('models', model_name))
         saver.restore(sess, ckpt)
 
+        history = "";
+
         while True:
-            raw_text = input("Model prompt >>> ")
-            while not raw_text:
-                print('Prompt should not be empty!')
-                raw_text = input("Model prompt >>> ")
-            context_tokens = enc.encode(raw_text)
+            raw_text = input("Введите текст >>> ")
+            while not raw_text and not history:
+                print('Текст не должен быть пустым!')
+                raw_text = input("Введите текст >>> ")
+            if raw_text:
+                if raw_text == "new":
+                    history = ""
+                    raw_text = input("Введите текст >>> ")
+                    while not raw_text:
+                        print('Текст не должен быть пустым!')
+                        raw_text = input("Введите текст >>> ")
+                #if raw_text == "reroll":
+            
+            history += (" " + raw_text) if raw_text else ""
+            context_tokens = enc.encode(history)
             generated = 0
             for _ in range(nsamples // batch_size):
                 out = sess.run(output, feed_dict={
@@ -80,9 +93,13 @@ def interact_model(
                 for i in range(batch_size):
                     generated += 1
                     text = enc.decode(out[i])
-                    print("=" * 40 + " SAMPLE " + str(generated) + " " + "=" * 40)
-                    print(text)
-            print("=" * 80)
+                    #print("=" * 40 + " SAMPLE " + str(generated) + " " + "=" * 40)
+                    #print(text)
+            #print("=" * 80)
+            history += text
+            print (history)
+            writer = tf.summary.FileWriter('./named_scope',sess.graph)
+            writer.close()
 
 if __name__ == '__main__':
     fire.Fire(interact_model)
