@@ -98,8 +98,8 @@ def interact_model(
             #print("=" * 80)
             history += text
             print (history)
-            writer = tf.summary.FileWriter('./named_scope',sess.graph)
-            writer.close()
+            #writer = tf.summary.FileWriter('./named_scope',sess.graph)
+            #writer.close()
 
 if __name__ == '__main__':
     fire.Fire(interact_model)
