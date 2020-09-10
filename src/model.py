@@ -150,9 +150,10 @@ def model(hparams, X, past=None, scope='model', reuse=tf.AUTO_REUSE):
         batch, sequence = shape_list(X)
 
         wpe = tf.get_variable('wpe', [hparams.n_ctx, hparams.n_embd],
-                             initializer=tf.random_normal_initializer(stddev=0.01))
+                             initializer=tf.random_normal_initializer(stddev=0.01)) # полагаю это позиционное кодирование ?
         wte = tf.get_variable('wte', [hparams.n_vocab, hparams.n_embd],
-                             initializer=tf.random_normal_initializer(stddev=0.02))
+                             initializer=tf.random_normal_initializer(stddev=0.02)) # а это - текстовый эмбендинг?
+        
         past_length = 0 if past is None else tf.shape(past)[-2]
         h = tf.gather(wte, X) + tf.gather(wpe, positions_for(X, past_length))
 
