@@ -21,6 +21,7 @@ def interact_model(
     """
     Interactively run the model
     :model_name=117M : String, which model to use
+    :models_path=models : String, location of models folder
     :seed=None : Integer seed for random number generators, fix seed to reproduce
      results
     :nsamples=1 : Number of samples to return total
