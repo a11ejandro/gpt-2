@@ -44,7 +44,7 @@ def interact_model(
     enc = encoder.get_encoder(model_name)
     hparams = model.default_hparams()
     
-    with open(os.path.join('models', model_name, 'hparams.json')) as f:
+    with open(os.path.join(model, model_name, 'hparams.json')) as f:
         hparams.override_from_dict(json.load(f))
 
     if length is None:
@@ -65,7 +65,7 @@ def interact_model(
 
         saver = tf.train.Saver()
         #ckpt = tf.train.latest_checkpoint(os.path.join('models', model_name, 'checkpoint/%s' % run_name))
-        ckpt = tf.train.latest_checkpoint(os.path.join('models', model_name))
+        ckpt = tf.train.latest_checkpoint(os.path.join(models, model_name))
         saver.restore(sess, ckpt)
 
         history = "";
