@@ -9,9 +9,6 @@ try:
 except:
     pass
 
-if len(sys.argv) != 1:
-    print('You must enter the full checkpoint path as a parameter, e.g. /content/drive/My Drive/gpt_2_checkpoint')
-    sys.exit(1)
 
 """Mounts the user's Google Drive in Colaboratory."""
 assert 'google.colab' in sys.modules, "You must be in Colaboratory to mount your Google Drive"
@@ -19,10 +16,13 @@ assert 'google.colab' in sys.modules, "You must be in Colaboratory to mount your
 drive.mount('/content/drive')
 
 file_path = sys.argv[1]
+model_name = sys.argv[2]
 
 checkpoint_folder = os.path.join('checkpoint', 'run1')
-if not os.path.exists(checkpoint_folder):
-    os.makedirs(checkpoint_folder)
+model_folder = os.path.join('models', model_name)
+# if not os.path.exists(checkpoint_folder):
+#     os.makedirs(checkpoint_folder)
 checkpoint_folder = checkpoint_folder.replace('\\','/') # needed for Windows
-print(checkpoint_folder)
-shutil.copytree(file_path, checkpoint_folder)
+model_folder = model_folder.replace('\\','/') # needed for Windows
+print(model_folder)
+shutil.copytree(file_path, model_folder)
