@@ -9,7 +9,7 @@ try:
 except:
     pass
 
-if len(sys.argv) != 2:
+if len(sys.argv) != 1:
     print('You must enter the full checkpoint path as a parameter, e.g. /content/drive/My Drive/gpt_2_checkpoint')
     sys.exit(1)
 
