@@ -13,7 +13,8 @@ except:
 """Mounts the user's Google Drive in Colaboratory."""
 assert 'google.colab' in sys.modules, "You must be in Colaboratory to mount your Google Drive"
 
-drive.mount('/content/drive')
+if not os.path.isdir('/content/drive'):
+    drive.mount('/content/drive')
 
 file_path = sys.argv[1]
 model_name = sys.argv[2]

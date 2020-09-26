@@ -44,7 +44,7 @@ def interact_model(
     enc = encoder.get_encoder(model_name)
     hparams = model.default_hparams()
     
-    with open(os.path.join('model', model_name, 'hparams.json')) as f:
+    with open(os.path.join('models', model_name, 'hparams.json')) as f:
         hparams.override_from_dict(json.load(f))
 
     if length is None:
