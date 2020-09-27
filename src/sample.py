@@ -27,7 +27,7 @@ def sample_sequence(*, hparams, length, start_token=None, batch_size=None, conte
         assert context is not None, 'Specify exactly one of start_token and context!'
     else:
         assert context is None, 'Specify exactly one of start_token and context!'
-        context = tf.fill([batch_size, 1], start_token)
+        context = tf.fill([batch_size, None], start_token)
 
     def step(hparams, tokens, past=None):
         lm_output = model.model(hparams=hparams, X=tokens, past=past, reuse=tf.AUTO_REUSE)
