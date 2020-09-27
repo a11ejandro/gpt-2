@@ -57,7 +57,7 @@ def sample_model(
             hparams=hparams, length=length,
             start_token=enc.encode('<|endoftext|>'),
             batch_size=batch_size,
-            temperature=temperature, top_k=top_k, top_p=top_p
+            temperature=temperature, top_k=top_k
         )[:, 1:]
 
         saver = tf.train.Saver()
