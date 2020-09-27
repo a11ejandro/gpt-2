@@ -58,7 +58,7 @@ def sample_model(
             start_token=enc.encode('<|endoftext|>'),
             batch_size=batch_size,
             temperature=temperature, top_k=top_k
-        )[:, 1:]
+        )
 
         saver = tf.train.Saver()
         ckpt = tf.train.latest_checkpoint(os.path.join('models', model_name))
