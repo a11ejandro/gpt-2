@@ -52,7 +52,6 @@ def sample_model(
     with tf.Session(graph=tf.Graph()) as sess:
         np.random.seed(seed)
         tf.set_random_seed(seed)
-        context = tf.placeholder(tf.int32, [batch_size, None])
         output = sample.sample_sequence(
             hparams=hparams,
             length=length,
@@ -60,7 +59,6 @@ def sample_model(
             batch_size=batch_size,
             temperature=temperature,
             top_k=top_k,
-            context=context,
         )
 
         saver = tf.train.Saver()
