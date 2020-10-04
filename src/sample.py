@@ -27,7 +27,6 @@ def sample_sequence(*, hparams, length, start_token=None, batch_size=None, conte
         assert context is not None, 'Specify exactly one of start_token and context!'
     else:
         assert context is None, 'Specify exactly one of start_token and context!'
-        print('batch size', batch_size)
         context = tf.placeholder(tf.int32, shape=[batch_size, None])
 
     def step(hparams, tokens, past=None):

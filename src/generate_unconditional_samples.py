@@ -49,25 +49,30 @@ def sample_model(
     elif length > hparams.n_ctx:
         raise ValueError("Can't get samples longer than window size: %s" % hparams.n_ctx)
 
+
     with tf.Session(graph=tf.Graph()) as sess:
         np.random.seed(seed)
         tf.set_random_seed(seed)
+        context = tf.placeholder(tf.int32, [1, None])
         output = sample.sample_sequence(
             hparams=hparams,
             length=length,
-            start_token=enc.encode('<|endoftext|>'),
+            context=context,
             batch_size=batch_size,
             temperature=temperature,
             top_k=top_k,
         )
+
+        # start_token=enc.encode('<|endoftext|>'),
 
         saver = tf.train.Saver()
         ckpt = tf.train.latest_checkpoint(os.path.join('models', model_name))
         saver.restore(sess, ckpt)
 
         generated = 0
+        context_tokens = enc.encode('<|endoftext|>')
         while nsamples == 0 or generated < nsamples:
-            out = sess.run(output)
+            out = sess.run(output, feed_dict={context: [context_tokens for _ in range(batch_size)]})
             for i in range(batch_size):
                 generated += batch_size
                 text = enc.decode(out[i])
