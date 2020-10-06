@@ -9,14 +9,14 @@ import numpy as np
 import tensorflow as tf
 import random
 import time
-import memory_saving_gradients
+import src.memory_saving_gradients as memory_saving_gradients
 import horovod.tensorflow as hvd
 
 import argparse
 from tensorflow.core.protobuf import rewriter_config_pb2
 
-import model as model, sample, encoder_sp as encoder
-from load_dataset import load_dataset, Sampler
+import src.model as model, src.sample as sample, src.encoder_sp as encoder
+from src.load_dataset import load_dataset, Sampler
 
 
 CHECKPOINT_DIR = 'checkpoint-1250M'
